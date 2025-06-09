@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donations - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            <a href="survey.html" class="nav-link">Survey Form</a>
+            <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+            <a href="donation.html" class="nav-link" id="donateLink">Donate</a>
+            <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+            <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+            <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Donation Management</h1>
+        
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>Total Donations</h3>
+                <p id="totalAmount">$0.00</p>
+            </div>
+            <div class="summary-card">
+                <h3>Total Donors</h3>
+                <p id="totalDonors">0</p>
+            </div>
+        </div>
+
+        <div class="donations-list">
+            <h2>Donation History</h2>
+            <table id="donationsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="donationsTableBody">
+                    <!-- Donation rows will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in and is admin
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            
+            if (!userEmail || !isAdmin) {
+                window.location.href = 'index.html';
+                return;
+            }
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+
+        // Load donations from localStorage
+        function loadDonations() {
+            const donations = JSON.parse(localStorage.getItem('donations')) || [];
+            const tableBody = document.getElementById('donationsTableBody');
+
+            // Clear existing table rows
+            tableBody.innerHTML = '';
+
+            // Calculate total amount and identify repeat donors
+            let totalAmount = 0;
+            const donorCounts = {}; // To track donations per email
+
+            donations.forEach(donation => {
+                totalAmount += parseFloat(donation.amount); // Sum up the numeric amounts
+
+                // Count donations per email
+                if (donorCounts[donation.email]) {
+                    donorCounts[donation.email]++;
+                } else {
+                    donorCounts[donation.email] = 1;
+                }
+            });
+
+            // Get unique donor count
+            const totalDonors = Object.keys(donorCounts).length; // Count of unique emails
+
+            // Update summary cards
+            document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+            document.getElementById('totalDonors').textContent = totalDonors;
+
+            if (donations.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No donations yet.</td></tr>';
+                return;
+            }
+
+            // Add donation rows
+            donations.forEach(donation => {
+                const row = document.createElement('tr');
+                let rowClass = '';
+                // Apply highlight if donor has made more than one donation
+                if (donorCounts[donation.email] > 1) {
+                    rowClass = 'repeat-donor-highlight';
+                }
+
+                row.className = rowClass; // Assign the class
+
+                row.innerHTML = `
+                    <td>${donation.name}</td>
+                    <td>${donation.email}</td>
+                    <td>$${parseFloat(donation.amount).toFixed(2)}</td>
+                    <td>${donation.paymentMethod}</td>
+                    <td>${donation.date}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Load donations when page loads
+        window.addEventListener('load', loadDonations);
+
+        // Check if user is admin and show/hide appropriate links
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+                document.getElementById('membersLink').style.display = 'inline-block';
+                document.getElementById('donationsLink').style.display = 'inline-block';
+                // Remove the donate button for admin users
+                document.getElementById('donateLink').style.display = 'none';
+            } else {
+                // Show the donate button for regular users
+                document.getElementById('donateLink').style.display = 'inline-block';
+            }
+        }
+
+        // Check admin status on page load
+        window.addEventListener('load', checkAdminStatus);
+    </script>
+</body>
+</html> 

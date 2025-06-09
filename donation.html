@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            
+                <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+                <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+                <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+                <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+                <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+                <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+                <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            
+            
+                 <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="donation-container">
+            <h1>Support Our Recipe Collection</h1>
+            <p class="donation-intro">Your donation helps us maintain and improve our recipe collection platform. Every contribution makes a difference!</p>
+            
+            <div class="donation-options">
+                <div class="donation-card">
+                    <h3>₹100</h3>
+                    <p>Basic Support</p>
+                    <button class="donate-btn" data-amount="100">Donate Now</button>
+                </div>
+                <div class="donation-card">
+                    <h3>₹500</h3>
+                    <p>Premium Support</p>
+                    <button class="donate-btn" data-amount="500">Donate Now</button>
+                </div>
+                <div class="donation-card">
+                    <h3>₹1000</h3>
+                    <p>Gold Support</p>
+                    <button class="donate-btn" data-amount="1000">Donate Now</button>
+                </div>
+                <div class="donation-card">
+                    <h3>Custom</h3>
+                    <p>Choose Amount</p>
+                    <input type="number" class="custom-amount" placeholder="Enter amount">
+                    <button class="donate-btn custom">Donate Now</button>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <h2>Payment Methods</h2>
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Credit Card</span>
+                    </div>
+                    <div class="payment-option">
+                        <i class="fas fa-university"></i>
+                        <span>Net Banking</span>
+                    </div>
+                    <div class="payment-option">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>UPI</span>
+                    </div>
+                    <div class="payment-option">
+                        <i class="fas fa-wallet"></i>
+                        <span>Digital Wallet</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="donation-form" style="display: none;">
+                <h2>Complete Your Donation</h2>
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="netbanking">Net Banking</option>
+                            <option value="upi">UPI</option>
+                            <option value="wallet">Digital Wallet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Donation Amount</label>
+                        <input type="text" id="amount" readonly>
+                    </div>
+                    <button type="submit" class="submit-btn">Complete Donation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Donation List Section -->
+    <div class="container" id="adminDonationList" style="display: none;">
+        <h1>Donation List (Admin View)</h1>
+        <div class="donation-list-container">
+            <table id="donationsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Donation rows will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Thank You Message -->
+    <div id="thankYouMessage" class="thank-you-message" style="display: none;">
+        <div class="success-content">
+            <div class="icon-container">
+                 <i class="fas fa-utensils"></i>
+            </div>
+            <h2>Congratulations for your payment! 😊 🎉</h2>
+            <p>Your support means a lot to us!</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+            // Check if user is admin and display appropriate content
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                document.getElementById('authorizedContent').style.display = 'none'; // Hide user donation options
+                document.getElementById('adminDonationList').style.display = 'block'; // Show admin list
+                loadDonations(); // Load and display donations
+            } else {
+                 document.getElementById('authorizedContent').style.display = 'block'; // Show user donation options
+                document.getElementById('adminDonationList').style.display = 'none'; // Hide admin list
+            }
+             // Check if user is admin and show/hide manage recipes link
+             checkAdminStatus();
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Check if user is admin and show/hide manage recipes link (from previous changes)
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            
+            // Always show Recipe Collection title and Home link for logged-in users
+            document.getElementById('homeLink').style.display = 'inline-block';
+
+            if (isAdmin) {
+                // Admin links
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+                document.getElementById('membersLink').style.display = 'inline-block';
+                document.getElementById('donationsLink').style.display = 'inline-block';
+
+                 // User links (hidden for admin)
+                 document.getElementById('surveyLink').style.display = 'none'; // Hide Survey Form for admin
+                document.getElementById('donateLink').style.display = 'none';
+                document.getElementById('aboutLink').style.display = 'none';
+                document.getElementById('profileLink').style.display = 'none'; // Hide profile for admin
+            } else {
+                // User links
+                document.getElementById('surveyLink').style.display = 'inline-block'; // Survey is visible for both
+                document.getElementById('donateLink').style.display = 'inline-block';
+                document.getElementById('aboutLink').style.display = 'inline-block';
+                document.getElementById('profileLink').style.display = 'inline-block'; // Show profile for user
+
+                // Admin links (hidden for user)
+                document.getElementById('manageRecipesLink').style.display = 'none';
+                document.getElementById('membersLink').style.display = 'none';
+                document.getElementById('donationsLink').style.display = 'none';
+            }
+        }
+
+        // Check admin status on page load
+        window.addEventListener('load', checkAdminStatus);
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+
+        // Donation functionality (User View)
+        const donationForm = document.querySelector('.donation-form');
+        const amountInput = document.getElementById('amount');
+        const customAmount = document.querySelector('.custom-amount');
+        const userDonationContent = document.getElementById('authorizedContent');
+
+        document.querySelectorAll('.donate-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const amount = button.classList.contains('custom') 
+                    ? customAmount.value 
+                    : button.dataset.amount;
+                
+                if (amount && amount > 0) {
+                    amountInput.value = `₹${amount}`;
+                    donationForm.style.display = 'block';
+                    donationForm.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Please enter a valid amount');
+                }
+            });
+        });
+
+        // Handle donation form submission
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            let amount = document.getElementById('amount').value.trim();
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            // Basic validation
+            if (!name || !email || !amount || !paymentMethod) {
+                alert('Please fill in all donation details.');
+                return;
+            }
+
+            // Clean amount string: remove '$', commas, and trim whitespace
+            amount = amount.replace(/[^0-9.]/g, ''); 
+
+            // Convert amount to a float after cleaning
+            const numericAmount = parseFloat(amount);
+            if (isNaN(numericAmount) || numericAmount <= 0) {
+                alert('Please enter a valid positive amount.');
+                return;
+            }
+
+            // Get existing donations or initialize empty array
+            let donations = JSON.parse(localStorage.getItem('donations')) || [];
+            
+            // Add new donation
+            donations.push({
+                name: name,
+                email: email,
+                amount: numericAmount.toFixed(2), // Store as fixed 2 decimal places string
+                paymentMethod: paymentMethod,
+                date: new Date().toLocaleDateString() // Capture current date
+            });
+            
+            // Save updated donations
+            localStorage.setItem('donations', JSON.stringify(donations));
+            
+            // Update total amount
+            let totalAmount = parseFloat(localStorage.getItem('totalDonations')) || 0;
+            totalAmount += numericAmount;
+            localStorage.setItem('totalDonations', totalAmount.toFixed(2));
+            
+            // Update total donors count (optional: only increment if this is a truly new donor, for now, increment every time)
+            let totalDonors = parseInt(localStorage.getItem('totalDonors')) || 0;
+            // To track unique donors, we'd need a separate set of unique emails.
+            // For now, it increments on every successful donation.
+            totalDonors += 1; 
+            localStorage.setItem('totalDonors', totalDonors.toString());
+            
+            // Show thank you message
+            document.getElementById('donation-form').style.display = 'none';
+            const thankYouMessage = document.getElementById('thankYouMessage');
+            thankYouMessage.querySelector('h2').innerHTML = 'Congratulations, your payment was received ❤️'; // Update message and add emoji
+            thankYouMessage.style.display = 'flex'; // Use flex to center content
+
+            // Navigate to home page after a delay with animation
+            setTimeout(() => {
+                document.body.classList.add('fade-out-page'); // Add class for exit animation
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 500); // Redirect after animation duration
+            }, 3000); // Show message for 3 seconds
+
+            this.reset(); // Clear the form
+        });
+
+        // Load donations for admin view
+        function loadDonations() {
+            const donations = JSON.parse(localStorage.getItem('donations')) || [];
+            const totalAmount = parseFloat(localStorage.getItem('totalDonations')) || 0;
+            const totalDonors = parseInt(localStorage.getItem('totalDonors')) || 0;
+            
+            const tableBody = document.querySelector('#donationsTable tbody');
+            tableBody.innerHTML = '';
+            
+            // Add summary row
+            const summaryRow = document.createElement('tr');
+            summaryRow.innerHTML = `
+                <td colspan="3" style="text-align: right; font-weight: bold;">Total Amount: $${totalAmount.toFixed(2)}</td>
+                <td style="text-align: right; font-weight: bold;">Total Donors: ${totalDonors}</td>
+            `;
+            tableBody.appendChild(summaryRow);
+            
+            // Add donation rows
+            donations.forEach(donation => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${donation.name}</td>
+                    <td>${donation.email}</td>
+                    <td>$${parseFloat(donation.amount).toFixed(2)}</td>
+                    <td>${donation.paymentMethod}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+    </script>
+
+    <style>
+        .thank-you-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .thank-you-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            text-align: center;
+            animation: slideUp 0.5s ease;
+        }
+
+        .thank-you-content h2 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .emoji-animation {
+            font-size: 4rem;
+            margin: 1rem 0;
+            animation: bounce 1s infinite;
+        }
+
+        .thank-you-content p {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</body>
+</html> 

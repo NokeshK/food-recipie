@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+            <a href="profile.html" class="nav-link" id="profileLink"><i class="fas fa-user"></i> Profile</a>
+            <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+            <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+            <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+            <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+            <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+            <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+        </div>
+    </div>
+
+    <!-- Donators Button - Initially hidden -->
+    <button id="donators-btn" style="display: none;">Donators</button>
+
+    <!-- Donators List Container - Initially hidden -->
+    <div id="donators-list" style="display: none;">
+        <h2>Donator List</h2>
+        <ul id="donators-ul">
+            <!-- Donator items will be added here by JavaScript -->
+        </ul>
+    </div>
+
+    <div class="container">
+        <header class="main-header">
+            <h1>Delicious Recipe Collection</h1>
+            <p>Discover amazing recipes for every occasion</p>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search recipes...">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <h2>Recipe Collection</h2>
+
+        <div class="recipe-grid" id="recipeGrid">
+            <!-- Recipe cards will be loaded here dynamically -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Discover and share your favorite recipes with our community. From traditional dishes to modern cuisine, find inspiration for your next meal.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="survey.html">Survey</a></li>
+                    <li><a href="manage-recipes.html">Manage Recipes</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: nokesh8919500709@gmail.com</p>
+                <p>Phone: +91 7995654569</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Recipe Collection. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+            // After confirming login, check admin status
+            checkAdminStatus();
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Check if user is admin and show/hide manage recipes and members links
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            console.log('Admin status:', isAdmin); // Debug log
+
+            // Always show Recipe Collection title and Home link for logged-in users
+            document.getElementById('homeLink').style.display = 'inline-block';
+
+            if (isAdmin && userEmail === 'nokesh8919500709@gmail.com') {
+                // Admin links
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+                document.getElementById('membersLink').style.display = 'inline-block';
+                document.getElementById('donationsLink').style.display = 'inline-block';
+
+                // User links (hidden for admin)
+                document.getElementById('surveyLink').style.display = 'none';
+                document.getElementById('donateLink').style.display = 'none';
+                document.getElementById('aboutLink').style.display = 'none';
+                document.getElementById('profileLink').style.display = 'none';
+            } else {
+                // User links
+                document.getElementById('surveyLink').style.display = 'inline-block';
+                document.getElementById('donateLink').style.display = 'inline-block';
+                document.getElementById('aboutLink').style.display = 'inline-block';
+                document.getElementById('profileLink').style.display = 'inline-block';
+
+                // Admin links (hidden for user)
+                document.getElementById('manageRecipesLink').style.display = 'none';
+                document.getElementById('membersLink').style.display = 'none';
+                document.getElementById('donationsLink').style.display = 'none';
+            }
+        }
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+
+        // Initial recipes data (will be added to localStorage if it's empty)
+        const initialRecipes = [
+            {
+                name: "Classic Chocolate Cake",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "45",
+                difficulty: "Easy",
+                category: "Dessert",
+                ingredients: ["Flour", "Sugar", "Cocoa Powder", "Eggs", "Milk", "Butter"],
+                instructions: ["Mix ingredients.", "Bake.", "Decorate."]
+            },
+            {
+                name: "Homemade Pasta",
+                image: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "30",
+                difficulty: "Medium",
+                category: "Italian",
+                ingredients: ["Flour", "Eggs", "Water"],
+                instructions: ["Mix dough.", "Knead.", "Shape.", "Cook."]
+            },
+            {
+                name: "Fresh Garden Salad",
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "20",
+                difficulty: "Easy",
+                category: "Vegetarian",
+                ingredients: ["Lettuce", "Tomatoes", "Cucumbers", "Carrots", "Dressing"],
+                instructions: ["Wash vegetables.", "Chop.", "Mix.", "Serve with dressing."]
+            },
+            {
+                name: "Margherita Pizza",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "40",
+                difficulty: "Medium",
+                category: "Italian",
+                ingredients: ["Pizza Dough", "Tomato Sauce", "Fresh Mozzarella", "Basil"],
+                instructions: ["Prepare dough.", "Add toppings.", "Bake."]
+            },
+            {
+                name: "Classic Burger",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "25",
+                difficulty: "Easy",
+                category: "American",
+                ingredients: ["Ground Beef", "Buns", "Cheese", "Lettuce", "Tomato", "Onion"],
+                instructions: ["Form patties.", "Grill.", "Assemble burger."]
+            },
+            {
+                name: "Homemade Sushi",
+                image: "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "60",
+                difficulty: "Hard",
+                category: "Japanese",
+                ingredients: ["Sushi Rice", "Nori", "Fish/Vegetables", "Soy Sauce", "Wasabi", "Ginger"],
+                instructions: ["Cook rice.", "Prepare fillings.", "Roll sushi.", "Slice and serve."]
+            },
+            {
+                name: "Buddha Bowl",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "15",
+                difficulty: "Easy",
+                category: "Healthy",
+                ingredients: ["Quinoa", "Roasted Vegetables", "Leafy Greens", "Chickpeas", "Tahini Dressing"],
+                instructions: ["Cook quinoa.", "Roast vegetables.", "Assemble bowl.", "Add dressing."]
+            },
+            {
+                name: "Thai Curry",
+                image: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "50",
+                difficulty: "Medium",
+                category: "Thai",
+                ingredients: ["Curry Paste", "Coconut Milk", "Vegetables", "Protein (Chicken/Tofu)", "Rice"],
+                instructions: ["Sauté curry paste.", "Add coconut milk and ingredients.", "Simmer.", "Serve with rice."]
+            },
+            {
+                name: "Tomato Soup",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "35",
+                difficulty: "Easy",
+                category: "Soup",
+                ingredients: ["Tomatoes", "Onion", "Garlic", "Vegetable Broth", "Cream"],
+                instructions: ["Sauté vegetables.", "Add broth and tomatoes.", "Simmer and blend.", "Add cream."]
+            },
+            {
+                name: "Berry Smoothie",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                cookingTime: "10",
+                difficulty: "Easy",
+                category: "Drinks",
+                ingredients: ["Mixed Berries", "Yogurt/Milk", "Honey"],
+                instructions: ["Combine ingredients in blender.", "Blend until smooth.", "Serve."]
+            },
+            {
+                name: "Chicken Curry",
+                image: "https://www.foodandwine.com/thmb/8YAIANQTZnGpVWj2XgY0dYH1V4I=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/spicy-chicken-curry-FT-RECIPE0321-58f84fdf7b484e7f86894203eb7834e7.jpg",
+                cookingTime: "45",
+                difficulty: "Medium",
+                category: "Non-Vegetarian",
+                ingredients: ["Chicken", "Onion", "Garlic", "Ginger", "Curry Powder", "Coconut Milk"],
+                instructions: ["Cook chicken.", "Prepare sauce.", "Combine and simmer."]
+            },
+            {
+                name: "Egg Curry",
+                image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2024/06/south-indian-egg-curry-recipe.jpg",
+                cookingTime: "40",
+                difficulty: "Easy",
+                category: "Vegetarian",
+                ingredients: ["Eggs", "Onion", "Tomatoes", "Ginger-Garlic Paste", "Spices"],
+                instructions: ["Boil eggs.", "Prepare gravy.", "Add eggs and simmer."]
+            },
+            {
+                name: "Tomato Rice",
+                image: "https://www.secondrecipe.com/wp-content/uploads/2020/01/tomato-rice.jpg",
+                cookingTime: "30",
+                difficulty: "Easy",
+                category: "Vegetarian",
+                ingredients: ["Rice", "Tomatoes", "Onion", "Spices"],
+                instructions: ["Cook rice.", "Sauté ingredients.", "Combine and cook."]
+            }
+        ];
+
+        // Simulated donator data
+        const simulatedDonators = [
+            { email: 'john.doe@example.com', amount: '$50' },
+            { email: 'jane.smith@example.com', amount: '$100' },
+            { email: 'peter.jones@example.com', amount: '$25' }
+        ];
+
+        // Function to display donators
+        function displayDonators() {
+            const donatorsListDiv = document.getElementById('donators-list');
+            const donatorsUl = document.getElementById('donators-ul');
+            
+            donatorsUl.innerHTML = ''; // Clear previous list
+
+            simulatedDonators.forEach(donator => {
+                const li = document.createElement('li');
+                li.textContent = `Email: ${donator.email}, Amount: ${donator.amount}`;
+                donatorsUl.appendChild(li);
+            });
+
+            donatorsListDiv.style.display = 'block'; // Show the donator list container
+        }
+
+        // Add event listener to the Donators button
+        document.getElementById('donators-btn').addEventListener('click', displayDonators);
+
+        // Function to load recipes from localStorage and display them
+        function loadAndDisplayRecipes() {
+            let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+
+            // If localStorage is empty or not properly initialized, use the initial 13 recipes
+            if (!Array.isArray(recipes) || recipes.length === 0) {
+                 recipes = initialRecipes;
+                 localStorage.setItem('recipes', JSON.stringify(initialRecipes)); // Save initial recipes to localStorage
+             }
+            
+            const recipeGrid = document.getElementById('recipeGrid');
+
+            // Clear existing recipe cards
+            recipeGrid.innerHTML = '';
+
+            recipes.forEach((recipe, index) => {
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card';
+                recipeCard.style.cursor = 'pointer';
+                // Link to the generic recipe detail page, passing the index in the recipes array
+                recipeCard.onclick = () => {
+                    window.location.href = `recipe-detail.html?id=${index}`;
+                };
+
+                recipeCard.innerHTML = `
+                    <div class="card-image">
+                        <img src="${recipe.image}" alt="${recipe.name}">
+                        <div class="card-overlay">
+                            <span class="time"><i class="fas fa-clock"></i> ${recipe.cookingTime} mins</span>
+                            <span class="difficulty"><i class="fas fa-signal"></i> ${recipe.difficulty}</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>${recipe.name}</h3>
+                        <p>${Array.isArray(recipe.instructions) ? recipe.instructions[0] : (typeof recipe.instructions === 'string' ? recipe.instructions.split('\n')[0] : '')}</p>
+                        <div class="card-tags">
+                            <span>${recipe.category}</span>
+                        </div>
+                    </div>
+                `;
+                recipeGrid.appendChild(recipeCard);
+            });
+        }
+
+        // Load and display recipes when the page loads
+        window.addEventListener('load', loadAndDisplayRecipes);
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.recipe-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                const tags = Array.from(card.querySelectorAll('.card-tags span'))
+                    .map(tag => tag.textContent.toLowerCase());
+                
+                if (title.includes(searchTerm) || 
+                    description.includes(searchTerm) || 
+                    tags.some(tag => tag.includes(searchTerm))) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

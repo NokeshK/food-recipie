@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Feedback Survey</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            
+                <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+                <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+                <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+                <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+                <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+                <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+                <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            
+            
+                 <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+            
+        </div>
+    </div>
+
+    <div class="survey-container">
+        <header class="survey-header">
+            <h1>Customer Feedback Survey</h1>
+            <p>A survey form webpage is one of the valuable projects of web development for practicing form handling using HTML and CSS. It is essential to learn how to get feedback from customers using a web form. </p>
+            <p>The objective of this project is to create a simple and user-friendly survey form that allows users to input several pieces of information. The form should include different types of input fields, including text boxes, radio buttons, checkboxes, and a submit button. The survey form web page should be clear and easy to use.</p>
+            <p>The main focus of the project is to produce a design that is both simple and accessible for the users. The from-filling process by the users should be a hassle-free task. The layout of the form should be responsive and accessible from a variety of devices.</p>
+        </header>
+
+        <form id="customerSurveyForm">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ageRange">Age Range:</label>
+                <select id="ageRange" name="ageRange">
+                    <option value="">Select Age Range</option>
+                    <option value="under18">Under 18</option>
+                    <option value="18-24">18-24</option>
+                    <option value="25-34">25-34</option>
+                    <option value="35-44">35-44</option>
+                    <option value="45-54">45-54</option>
+                    <option value="55+">55+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>How did you hear about us?</label>
+                <div class="radio-group">
+                    <input type="radio" id="wordOfMouth" name="howHear" value="wordOfMouth">
+                    <label for="wordOfMouth">Word of Mouth</label>
+                    <input type="radio" id="socialMedia" name="howHear" value="socialMedia">
+                    <label for="socialMedia">Social Media</label>
+                    <input type="radio" id="onlineSearch" name="howHear" value="onlineSearch">
+                    <label for="onlineSearch">Online Search</label>
+                    <input type="radio" id="other" name="howHear" value="other">
+                    <label for="other">Other</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Interested Services:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="service1" name="services" value="service1">
+                    <label for="service1">Service One</label>
+                    <input type="checkbox" id="service2" name="services" value="service2">
+                    <label for="service2">Service Two</label>
+                    <input type="checkbox" id="service3" name="services" value="service3">
+                    <label for="service3">Service Three</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Additional Comments:</label>
+                <textarea id="comments" name="comments" rows="4"></textarea>
+            </div>
+
+             <div class="form-group">
+                <label>Overall Satisfaction:</label>
+                <div class="radio-group">
+                    <input type="radio" id="satisfaction5" name="satisfaction" value="5" required>
+                    <label for="satisfaction5">5 (Very Satisfied)</label>
+                    <input type="radio" id="satisfaction4" name="satisfaction" value="4">
+                    <label for="satisfaction4">4</label>
+                    <input type="radio" id="satisfaction3" name="satisfaction" value="3">
+                    <label for="satisfaction3">3 (Neutral)</label>
+                     <input type="radio" id="satisfaction2" name="satisfaction" value="2">
+                    <label for="satisfaction2">2</label>
+                     <input type="radio" id="satisfaction1" name="satisfaction" value="1">
+                    <label for="satisfaction1">1 (Very Dissatisfied)</label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Survey</button>
+        </form>
+
+        <div id="successMessage" class="success-message" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            <p>Survey submitted successfully!</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Check if user is admin and show/hide manage recipes link
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+            // Always show Recipe Collection title and Home link for logged-in users
+            document.getElementById('homeLink').style.display = 'inline-block';
+
+            if (isAdmin) {
+                // Admin links
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+                document.getElementById('membersLink').style.display = 'inline-block';
+                document.getElementById('donationsLink').style.display = 'inline-block';
+
+                // User links (hidden for admin)
+                document.getElementById('surveyLink').style.display = 'none'; // Hide Survey Form for admin
+                document.getElementById('donateLink').style.display = 'none';
+                document.getElementById('aboutLink').style.display = 'none';
+                document.getElementById('profileLink').style.display = 'none';
+            } else {
+                // User links
+                document.getElementById('surveyLink').style.display = 'inline-block';
+                document.getElementById('donateLink').style.display = 'inline-block';
+                document.getElementById('aboutLink').style.display = 'inline-block';
+                document.getElementById('profileLink').style.display = 'inline-block';
+
+                // Admin links (hidden for user)
+                document.getElementById('manageRecipesLink').style.display = 'none';
+                document.getElementById('membersLink').style.display = 'none';
+                document.getElementById('donationsLink').style.display = 'none';
+            }
+        }
+
+        // Check admin status on page load
+        window.addEventListener('load', checkAdminStatus);
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+
+        document.getElementById('customerSurveyForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Hide the form and show the success message
+            document.getElementById('customerSurveyForm').style.display = 'none';
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'flex'; // Use flex to center content
+
+            // Optional: Add a class for CSS animations
+            successMessage.classList.add('show-message');
+
+            // Redirect to the main page after a short delay
+            setTimeout(function() {
+                window.location.href = 'index.html';
+            }, 2000); // Redirect after 2 seconds (adjust as needed)
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Rice Recipe</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        </div>
+    </nav>
+
+    <header class="recipe-header">
+        <div class="container">
+            <h1 class="animated-title">Tomato Rice</h1>
+            <div class="recipe-meta">
+                <span><i class="fas fa-clock"></i> 30 mins</span>
+                <span><i class="fas fa-signal"></i> Easy</span>
+                <span><i class="fas fa-seedling"></i> Vegetarian</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="recipe-details">
+        <div class="container">
+            <div class="recipe-image-container">
+                <img src="https://www.secondrecipe.com/wp-content/uploads/2020/01/tomato-rice.jpg" alt="Tomato Rice" class="recipe-image">
+                <div class="image-overlay">
+                    <i class="fas fa-utensils"></i> Flavorful Tomato Rice
+                </div>
+            </div>
+
+            <div class="recipe-content">
+                <div class="recipe-description">
+                    <p>A quick and delicious one-pot meal that combines the tangy flavor of tomatoes with aromatic spices and fluffy rice. Perfect for busy weekdays or as a side dish.</p>
+                </div>
+
+                <div class="recipe-grid">
+                    <div class="ingredients-section">
+                        <h2><i class="fas fa-list"></i> Ingredients</h2>
+                        <ul class="ingredients-list">
+                            <li class="ingredient-item">2 cups Basmati Rice</li>
+                            <li class="ingredient-item">4 large Tomatoes</li>
+                            <li class="ingredient-item">1 large Onion</li>
+                            <li class="ingredient-item">2 tbsp Ginger-Garlic Paste</li>
+                            <li class="ingredient-item">1 tsp Turmeric Powder</li>
+                            <li class="ingredient-item">2 tsp Red Chili Powder</li>
+                            <li class="ingredient-item">1 tsp Garam Masala</li>
+                            <li class="ingredient-item">2 tbsp Ghee or Oil</li>
+                            <li class="ingredient-item">Fresh Coriander for garnish</li>
+                        </ul>
+                    </div>
+
+                    <div class="instructions-section">
+                        <h2><i class="fas fa-tasks"></i> Instructions</h2>
+                        <ol class="instructions-list">
+                            <li class="instruction-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Prepare Base</h3>
+                                    <p>Heat oil or ghee in a pot and add whole spices.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Saute Onions</h3>
+                                    <p>Add onions and saute until translucent.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Add Aromatics</h3>
+                                    <p>Add ginger-garlic paste and saute until fragrant.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Cook Tomatoes</h3>
+                                    <p>Add tomatoes and cook until mushy.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">5</div>
+                                <div class="step-content">
+                                    <h3>Add Spices</h3>
+                                    <p>Add ground spices and mix well.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">6</div>
+                                <div class="step-content">
+                                    <h3>Cook Rice</h3>
+                                    <p>Add rice and water, then cook until rice is done.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">7</div>
+                                <div class="step-content">
+                                    <h3>Finish</h3>
+                                    <p>Fluff up the rice and serve hot.</p>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h2><i class="fas fa-lightbulb"></i> Tips</h2>
+                    <ul class="tips-list">
+                        <li>For extra flavor, add a pinch of asafoetida (hing) while tempering.</li>
+                        <li>You can add vegetables like carrots and peas for a more nutritious meal.</li>
+                        <li>For a spicier version, increase the amount of red chili powder.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add animation to elements when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        });
+
+        document.querySelectorAll('.ingredient-item, .instruction-item, .tips-list li').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Recipes - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            
+                <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+                <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+                <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+                <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+                <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+                <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+                <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            
+            
+                 <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="unauthorizedMessage" style="display: none; text-align: center; padding: 2rem;">
+            <h2>Access Denied</h2>
+            <p>You are not authorized to access this page. Please log in with the correct account.</p>
+            <a href="index.html" class="btn">Return to Home</a>
+        </div>
+
+        <div id="authorizedContent" style="display: none;">
+            <h1>Manage Recipes</h1>
+            
+            <div class="recipe-form-container">
+                <h2>Add New Recipe</h2>
+                <form id="recipeForm" class="recipe-form">
+                    <div class="form-group">
+                        <label for="recipeName">Recipe Name:</label>
+                        <input type="text" id="recipeName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeImage">Image URL:</label>
+                        <input type="url" id="recipeImage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cookingTime">Cooking Time (minutes):</label>
+                        <input type="number" id="cookingTime" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="difficulty">Difficulty Level:</label>
+                        <select id="difficulty" required>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" required>
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Non-Vegetarian">Non-Vegetarian</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients (one per line):</label>
+                        <textarea id="ingredients" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Instructions (one per line):</label>
+                        <textarea id="instructions" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Recipe</button>
+                </form>
+            </div>
+
+            <div class="recipe-list-container">
+                <h2>Existing Recipes</h2>
+                <div id="recipeList" class="recipe-list">
+                    <!-- Recipe items will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message" style="display: none;">
+        <div class="success-content">
+            <div class="icon-container">
+                 <i class="fas fa-utensils"></i>
+            </div>
+            <p>Recipe added successfully!</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Check if user is admin and display appropriate content and navigation links
+        function checkAuth() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            
+            if (!isAdmin) {
+                document.getElementById('unauthorizedMessage').style.display = 'block';
+                document.getElementById('authorizedContent').style.display = 'none';
+                document.querySelector('.navbar').style.display = 'none';
+            } else {
+                document.getElementById('unauthorizedMessage').style.display = 'none';
+                document.getElementById('authorizedContent').style.display = 'block';
+                document.querySelector('.navbar').style.display = 'flex';
+                 
+                // Show/hide links based on admin status
+                document.getElementById('homeLink').style.display = 'inline-block'; // Home visible for admin
+                document.getElementById('profileLink').style.display = 'none'; // Profile hidden for admin
+                document.getElementById('surveyLink').style.display = 'none'; // Hide Survey Form for admin
+                document.getElementById('manageRecipesLink').style.display = 'inline-block'; // Manage Recipes visible for admin
+                document.getElementById('membersLink').style.display = 'inline-block'; // Members visible for admin
+                document.getElementById('donationsLink').style.display = 'inline-block'; // Donations visible for admin
+                document.getElementById('donateLink').style.display = 'none'; // Donate hidden for admin
+                document.getElementById('aboutLink').style.display = 'none'; // About hidden for admin
+            }
+        }
+
+        // Check auth and login status on page load
+        window.addEventListener('load', () => {
+            checkLogin();
+            checkAuth();
+        });
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+
+        // Load recipes from localStorage
+        function loadRecipes() {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipeList = document.getElementById('recipeList');
+            recipeList.innerHTML = '';
+
+            recipes.forEach((recipe, index) => {
+                const recipeElement = document.createElement('div');
+                recipeElement.className = 'recipe-item';
+                recipeElement.innerHTML = `
+                    <div class="recipe-item-content">
+                        <img src="${recipe.image}" alt="${recipe.name}" class="recipe-item-image">
+                        <div class="recipe-item-details">
+                            <h3>${recipe.name}</h3>
+                            <p><i class="fas fa-clock"></i> ${recipe.cookingTime} mins</p>
+                            <p><i class="fas fa-signal"></i> ${recipe.difficulty}</p>
+                            <p><i class="fas fa-utensils"></i> ${recipe.category}</p>
+                        </div>
+                    </div>
+                    <div class="recipe-item-actions">
+                        <button onclick="editRecipe(${index})" class="edit-btn"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteRecipe(${index})" class="delete-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                recipeList.appendChild(recipeElement);
+            });
+        }
+
+        // Add new recipe
+        document.getElementById('recipeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const recipe = {
+                name: document.getElementById('recipeName').value,
+                image: document.getElementById('recipeImage').value,
+                cookingTime: document.getElementById('cookingTime').value,
+                difficulty: document.getElementById('difficulty').value,
+                category: document.getElementById('category').value,
+                ingredients: document.getElementById('ingredients').value.split('\n'),
+                instructions: document.getElementById('instructions').value.split('\n')
+            };
+
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            recipes.push(recipe);
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('show');
+
+            // Hide success message and refresh list after a delay
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+                // Navigate to home page instead of refreshing the list on this page
+                window.location.href = 'index.html';
+            }, 3000); // Hide after 3 seconds and navigate
+
+            this.reset(); // Clear the form
+        });
+
+        // Edit recipe
+        function editRecipe(index) {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipe = recipes[index];
+            
+            // Populate form
+            document.getElementById('recipeName').value = recipe.name;
+            document.getElementById('recipeImage').value = recipe.image;
+            document.getElementById('cookingTime').value = recipe.cookingTime;
+            document.getElementById('difficulty').value = recipe.difficulty;
+            document.getElementById('category').value = recipe.category;
+            document.getElementById('ingredients').value = recipe.ingredients.join('\n');
+            document.getElementById('instructions').value = recipe.instructions.join('\n');
+
+            // Remove the old recipe
+            recipes.splice(index, 1);
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+            
+            // Reload recipes
+            loadRecipes();
+        }
+
+        // Delete recipe
+        function deleteRecipe(index) {
+            if (confirm('Are you sure you want to delete this recipe?')) {
+                const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+                recipes.splice(index, 1);
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                loadRecipes();
+            }
+        }
+
+        // Function to find and remove a recipe by its instructions
+        // This function is no longer automatically called on page load
+        function removeRecipeByInstructions(targetInstructions) {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const instructionsToFind = targetInstructions.split('\n').map(line => line.trim()).filter(line => line);
+            
+            const updatedRecipes = recipes.filter(recipe => {
+                const recipeInstructions = recipe.instructions.map(line => line.trim());
+                return !instructionsToFind.every(instruction => 
+                    recipeInstructions.some(recipeInstruction => 
+                        recipeInstruction.includes(instruction)
+                    )
+                );
+            });
+
+            if (updatedRecipes.length !== recipes.length) {
+                localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+                alert('Recipe has been removed successfully!');
+                loadRecipes(); // Refresh the recipe list
+            } else {
+                alert('Recipe not found!');
+            }
+        }
+
+        // The direct call to removeRecipeByInstructions is removed from here.
+        // It should be triggered by a specific user action (like a delete button click).
+
+        // Load recipes when page loads
+        loadRecipes();
+    </script>
+</body>
+</html> 

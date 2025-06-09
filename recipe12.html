@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egg Curry Recipe</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        </div>
+    </nav>
+
+    <header class="recipe-header">
+        <div class="container">
+            <h1 class="animated-title">Egg Curry</h1>
+            <div class="recipe-meta">
+                <span><i class="fas fa-clock"></i> 40 mins</span>
+                <span><i class="fas fa-signal"></i> Easy</span>
+                <span><i class="fas fa-egg"></i> Vegetarian</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="recipe-details">
+        <div class="container">
+            <div class="recipe-image-container">
+                <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2024/06/south-indian-egg-curry-recipe.jpg" alt="Egg Curry" class="recipe-image">
+                <div class="image-overlay">
+                    <i class="fas fa-utensils"></i> Dhaba Style Egg Curry
+                </div>
+            </div>
+
+            <div class="recipe-content">
+                <div class="recipe-description">
+                    <p>A delicious and protein-rich egg curry that's perfect for a quick and satisfying meal. This dhaba-style recipe brings authentic Indian flavors to your table.</p>
+                </div>
+
+                <div class="recipe-grid">
+                    <div class="ingredients-section">
+                        <h2><i class="fas fa-list"></i> Ingredients</h2>
+                        <ul class="ingredients-list">
+                            <li class="ingredient-item">6 Boiled Eggs</li>
+                            <li class="ingredient-item">2 large Onions</li>
+                            <li class="ingredient-item">3 Tomatoes</li>
+                            <li class="ingredient-item">2 tbsp Ginger-Garlic Paste</li>
+                            <li class="ingredient-item">1 tsp Turmeric Powder</li>
+                            <li class="ingredient-item">2 tsp Red Chili Powder</li>
+                            <li class="ingredient-item">1 tsp Garam Masala</li>
+                            <li class="ingredient-item">1/4 cup Cream (optional)</li>
+                            <li class="ingredient-item">Fresh Coriander for garnish</li>
+                        </ul>
+                    </div>
+
+                    <div class="instructions-section">
+                        <h2><i class="fas fa-tasks"></i> Instructions</h2>
+                        <ol class="instructions-list">
+                            <li class="instruction-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Prepare Eggs</h3>
+                                    <p>Fry boiled eggs until golden brown and set aside.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Saute Onions</h3>
+                                    <p>In the same pan, saute onions until translucent.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Add Aromatics</h3>
+                                    <p>Add ginger-garlic paste and saute until fragrant.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Cook Tomatoes</h3>
+                                    <p>Add tomatoes and cook until mushy.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">5</div>
+                                <div class="step-content">
+                                    <h3>Add Spices</h3>
+                                    <p>Add all the ground spices and mix well.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">6</div>
+                                <div class="step-content">
+                                    <h3>Simmer</h3>
+                                    <p>Add water and simmer until gravy thickens.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">7</div>
+                                <div class="step-content">
+                                    <h3>Add Eggs</h3>
+                                    <p>Add fried eggs and simmer for a few minutes.</p>
+                                </div>
+                            </li>
+                            <li class="instruction-item">
+                                <div class="step-number">8</div>
+                                <div class="step-content">
+                                    <h3>Finish</h3>
+                                    <p>Garnish with fresh coriander and serve hot with rice or bread.</p>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h2><i class="fas fa-lightbulb"></i> Tips</h2>
+                    <ul class="tips-list">
+                        <li>For extra flavor, make small slits in the boiled eggs before frying.</li>
+                        <li>You can add a pinch of sugar to balance the flavors.</li>
+                        <li>For a creamier texture, add a splash of cream at the end.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add animation to elements when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        });
+
+        document.querySelectorAll('.ingredient-item, .instruction-item, .tips-list li').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html> 

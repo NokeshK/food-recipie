@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members List (Admin) - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            
+                <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+                <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+                <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+                <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+                <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+                <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+                <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            
+            
+                 <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+            
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="unauthorizedMessage" style="display: none; text-align: center; padding: 2rem;">
+            <h2>Access Denied</h2>
+            <p>You are not authorized to access this page. Please log in with an admin account.</p>
+            <a href="index.html" class="btn">Return to Home</a>
+        </div>
+
+        <div id="authorizedContent" style="display: none;">
+            <h1>Registered Members</h1>
+            <div class="members-list-container">
+                <table id="membersTable">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <!-- Note: Passwords are not stored or displayed for security reasons -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Member rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in and is admin
+        function checkAdminAccess() {
+            const userEmail = localStorage.getItem('userEmail');
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+            if (!userEmail || !isAdmin) {
+                document.getElementById('unauthorizedMessage').style.display = 'block';
+                document.getElementById('authorizedContent').style.display = 'none';
+                 // Hide navbar for unauthorized access
+                const navbar = document.querySelector('.navbar');
+                if(navbar) navbar.style.display = 'none';
+
+            } else {
+                document.getElementById('unauthorizedMessage').style.display = 'none';
+                document.getElementById('authorizedContent').style.display = 'block';
+                 // Show all nav links for admin
+                 const navLinks = document.querySelectorAll('.navbar .nav-link');
+                 navLinks.forEach(link => link.style.display = 'inline-block');
+                 const logoutBtn = document.getElementById('logoutBtn');
+                 if(logoutBtn) logoutBtn.style.display = 'inline-block';
+
+                loadMembers(); // Load and display members
+            }
+        }
+
+        // Load and display members from localStorage
+        function loadMembers() {
+            // Retrieving emails of all logged-in users (passwords are NOT stored for security)
+            const memberEmails = JSON.parse(localStorage.getItem('loggedInUsers')) || [];
+            const membersTableBody = document.querySelector('#membersTable tbody');
+            membersTableBody.innerHTML = ''; // Clear existing table rows
+
+            if (memberEmails.length === 0) {
+                membersTableBody.innerHTML = '<tr><td colspan="1" style="text-align: center;">No members signed up yet.</td></tr>';
+                return;
+            }
+
+            memberEmails.forEach(email => {
+                const row = document.createElement('tr');
+                // Display email only for security
+                row.innerHTML = `<td>${email}</td>`;
+                membersTableBody.appendChild(row);
+            });
+        }
+
+        // Run check on page load
+        window.addEventListener('load', checkAdminAccess);
+
+        // Handle logout (similar to other pages)
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            // Note: We don't remove loggedInUsers here as it's the list for admin view
+            window.location.href = 'login.html';
+        });
+
+        // Check if user is admin and display appropriate content and navigation links
+        function checkAuth() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            
+            if (!isAdmin) {
+                document.getElementById('unauthorizedMessage').style.display = 'block';
+                document.getElementById('authorizedContent').style.display = 'none';
+                document.querySelector('.navbar').style.display = 'none'; // Hide navbar for unauthorized users
+            } else {
+                document.getElementById('unauthorizedMessage').style.display = 'none';
+                document.getElementById('authorizedContent').style.display = 'block';
+                document.querySelector('.navbar').style.display = 'flex'; // Show navbar for authorized users
+                 
+                // Show/hide links based on admin status
+                document.getElementById('homeLink').style.display = 'inline-block'; // Home visible for admin
+                document.getElementById('profileLink').style.display = 'none'; // Profile hidden for admin
+                document.getElementById('surveyLink').style.display = 'none'; // Hide Survey Form for admin
+                document.getElementById('manageRecipesLink').style.display = 'inline-block'; // Manage Recipes visible for admin
+                document.getElementById('membersLink').style.display = 'inline-block'; // Members visible for admin
+                document.getElementById('donationsLink').style.display = 'inline-block'; // Donations visible for admin
+                document.getElementById('donateLink').style.display = 'none'; // Donate hidden for admin
+                document.getElementById('aboutLink').style.display = 'none'; // About hidden for admin
+            }
+        }
+
+        // Check auth and login status on page load
+        window.addEventListener('load', () => {
+            checkLogin();
+            checkAuth();
+        });
+
+    </script>
+
+    <style>
+        /* Basic styles for the members list table */
+        .members-list-container {
+            margin-top: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        #membersTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        #membersTable th,
+        #membersTable td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        #membersTable th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        #membersTable tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #membersTable tbody tr:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</body>
+</html> 

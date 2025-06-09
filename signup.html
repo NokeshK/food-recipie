@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+    <!-- Main background dishes -->
+    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Delicious Dish 1" class="animated-dish left-dish">
+    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Delicious Dish 2" class="animated-dish right-dish">
+    <img src="https://images.unsplash.com/photo-1490647932296-77cd8a1f0276?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Dish 3" class="animated-dish left-dish-2">
+    <img src="https://images.unsplash.com/photo-1493770807516-ef084b09da5c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Dish 4" class="animated-dish left-dish-3">
+    <img src="https://images.unsplash.com/photo-1484723091739-cd68ae0d4bb3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Dish 5" class="animated-dish right-dish-2">
+    <img src="https://images.unsplash.com/photo-1504674900247-0877ce9b5117?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Dish 6" class="animated-dish right-dish-3">
+
+    <!-- Animated icons -->
+    <i class="fas fa-utensils animated-icon top-left-icon"></i>
+    <i class="fas fa-utensils animated-icon bottom-right-icon"></i>
+    <i class="fas fa-pizza-slice animated-icon top-right-icon"></i>
+    <i class="fas fa-hamburger animated-icon bottom-left-icon"></i>
+
+    <!-- Animated food images -->
+    <div class="animated-images">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0018.gif" alt="Animated Food 1" class="animated-food-img img-1">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0211.gif" alt="Animated Food 2" class="animated-food-img img-2">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0400.gif" alt="Animated Food 3" class="animated-food-img img-3">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0011.gif" alt="Animated Food 4" class="animated-food-img img-4">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0134.gif" alt="Animated Food 5" class="animated-food-img img-5">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0053.gif" alt="Animated Food 6" class="animated-food-img img-6">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0088.gif" alt="Animated Food 7" class="animated-food-img img-7">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0212.gif" alt="Animated Food 8" class="animated-food-img img-8">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0292.gif" alt="Animated Food 9" class="animated-food-img img-9">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0025.gif" alt="Animated Food 10" class="animated-food-img img-10">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0390.gif" alt="Animated Food 11" class="animated-food-img img-11">
+        <img src="https://www.animatedimages.org/data/media/298/animated-eat-and-drink-image-0108.gif" alt="Animated Food 12" class="animated-food-img img-12">
+    </div>
+
+    <div class="auth-container">
+        <h1>Sign Up</h1>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" required>
+            </div>
+            <button type="submit" class="btn primary-btn animated-btn">Sign Up</button>
+        </form>
+        <div class="auth-link">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            // In a real application, you would send this data to a server
+            localStorage.setItem('user', JSON.stringify({ name, email }));
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            
+                <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+                <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+                <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+                <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+                <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+                <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+                <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            
+            
+                 <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+            
+        </div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>Your Profile</h1>
+            <p class="subtitle">View and update your information</p>
+        </div>
+
+        <div class="profile-details">
+            <h2><i class="fas fa-info-circle"></i> Account Details</h2>
+            <p><strong>Name:</strong> <span id="userName">Loading...</span></p>
+            <p><strong>Email:</strong> <span id="userEmail">Loading...</span></p>
+            <p><strong>Age:</strong> <span id="userAge">Not specified</span></p>
+            <p><strong>Place:</strong> <span id="userPlace">Not specified</span></p>
+            <p><strong>Date of Birth:</strong> <span id="userDOB">Not specified</span></p>
+        </div>
+
+        <div class="profile-update">
+            <h2><i class="fas fa-edit"></i> Update Profile</h2>
+            <form id="updateProfileForm">
+                <div class="form-group">
+                    <label for="newName">Name:</label>
+                    <input type="text" id="newName" name="newName">
+                </div>
+                <div class="form-group">
+                    <label for="newAge">Age:</label>
+                    <input type="number" id="newAge" name="newAge" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="newPlace">Place:</label>
+                    <input type="text" id="newPlace" name="newPlace">
+                </div>
+                <div class="form-group">
+                    <label for="newDOB">Date of Birth:</label>
+                    <input type="date" id="newDOB" name="newDOB">
+                </div>
+                <button type="submit" class="btn animated-btn primary-btn">Update Profile</button>
+            </form>
+            <p id="updateMessage" class="message"></p>
+        </div>
+    </div>
+
+    <script>
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('userEmail').textContent = userEmail;
+            loadUserDetails();
+        }
+
+        function loadUserDetails() {
+            const userName = localStorage.getItem('userName') || 'Not specified';
+            const userAge = localStorage.getItem('userAge') || 'Not specified';
+            const userPlace = localStorage.getItem('userPlace') || 'Not specified';
+            const userDOB = localStorage.getItem('userDOB') || 'Not specified';
+
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('userAge').textContent = userAge;
+            document.getElementById('userPlace').textContent = userPlace;
+            document.getElementById('userDOB').textContent = userDOB;
+
+            // Pre-fill update form with current details (if available)
+            document.getElementById('newName').value = (userName !== 'Not specified') ? userName : '';
+            document.getElementById('newAge').value = (userAge !== 'Not specified') ? userAge : '';
+            document.getElementById('newPlace').value = (userPlace !== 'Not specified') ? userPlace : '';
+            document.getElementById('newDOB').value = (userDOB !== 'Not specified') ? userDOB : '';
+        }
+
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+            // Always show Recipe Collection title and Home link for logged-in users
+            document.getElementById('homeLink').style.display = 'inline-block';
+
+            if (isAdmin) {
+                // Admin links
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+                document.getElementById('membersLink').style.display = 'inline-block';
+                document.getElementById('donationsLink').style.display = 'inline-block';
+
+                // User links (hidden for admin)
+                document.getElementById('surveyLink').style.display = 'none'; // Hide Survey Form for admin
+                document.getElementById('donateLink').style.display = 'none';
+                document.getElementById('aboutLink').style.display = 'none';
+                document.getElementById('profileLink').style.display = 'none';
+            } else {
+                // User links
+                document.getElementById('surveyLink').style.display = 'inline-block';
+                document.getElementById('donateLink').style.display = 'inline-block';
+                document.getElementById('aboutLink').style.display = 'inline-block';
+                document.getElementById('profileLink').style.display = 'inline-block';
+
+                // Admin links (hidden for user)
+                document.getElementById('manageRecipesLink').style.display = 'none';
+                document.getElementById('membersLink').style.display = 'none';
+                document.getElementById('donationsLink').style.display = 'none';
+            }
+        }
+
+        window.addEventListener('load', () => {
+            checkLogin();
+            checkAdminStatus();
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userAge');
+            localStorage.removeItem('userPlace');
+            localStorage.removeItem('userDOB');
+            window.location.href = 'login.html';
+        });
+
+        document.getElementById('updateProfileForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const newName = document.getElementById('newName').value;
+            const newAge = document.getElementById('newAge').value;
+            const newPlace = document.getElementById('newPlace').value;
+            const newDOB = document.getElementById('newDOB').value;
+
+            let updated = false;
+
+            if (newName) {
+                localStorage.setItem('userName', newName);
+                updated = true;
+            }
+            if (newAge) {
+                 localStorage.setItem('userAge', newAge);
+                 updated = true;
+            }
+            if (newPlace) {
+                 localStorage.setItem('userPlace', newPlace);
+                 updated = true;
+            }
+            if (newDOB) {
+                 localStorage.setItem('userDOB', newDOB);
+                 updated = true;
+            }
+
+            loadUserDetails(); // Refresh displayed details
+
+            const updateMessageElement = document.getElementById('updateMessage');
+            if (updated) {
+                updateMessageElement.textContent = 'Profile updated successfully!';
+                updateMessageElement.style.color = 'green';
+            } else {
+                 updateMessageElement.textContent = 'No information to update.';
+                 updateMessageElement.style.color = 'orange';
+            }
+             updateMessageElement.style.opacity = '1';
+             setTimeout(() => {
+                updateMessageElement.style.opacity = '0';
+            }, 3000);
+        });
+
+    </script>
+</body>
+</html> 

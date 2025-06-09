@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            
+                <a href="index.html" class="nav-link" id="homeLink"><i class="fas fa-home"></i> Home</a>
+                <a href="profile.html" class="nav-link" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+                <a href="survey.html" class="nav-link" id="surveyLink">Survey Form</a>
+                <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+                <a href="donation.html" class="nav-link" id="donateLink" style="display: none;">Donate</a>
+                <a href="members.html" class="nav-link" id="membersLink" style="display: none;">Members</a>
+                <a href="donations.html" class="nav-link" id="donationsLink" style="display: none;">Donations</a>
+                <a href="about.html" class="nav-link" id="aboutLink" style="display: none;">About</a>
+            
+            
+                 <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+            
+        </div>
+    </div>
+
+    <div class="about-container">
+        <div class="about-header">
+            <h1>About Recipe Collection</h1>
+            <p class="subtitle">Your Ultimate Destination for Delicious Recipes</p>
+        </div>
+
+        <div class="about-section what-we-do">
+            <h2><i class="fas fa-utensils"></i> What We Do</h2>
+            <p>At Recipe Collection, we believe that cooking should be fun, simple, and inspiring. Whether you're a beginner or an experienced chef, our app offers a wide variety of recipes that cater to every taste and dietary preference.</p>
+        </div>
+
+        <div class="about-section features">
+            <h2><i class="fas fa-star"></i> Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Thousands of Recipes</h3>
+                    <p>Explore meals ranging from everyday dinners to festive delights.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Smart Search</h3>
+                    <p>Quickly find recipes based on ingredients, cuisine, or meal type.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-camera"></i>
+                    <h3>Step-by-Step Instructions</h3>
+                    <p>Easy-to-follow instructions with photos or videos.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>User-Friendly Interface</h3>
+                    <p>Cook and browse effortlessly with a clean and intuitive design.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bookmark"></i>
+                    <h3>Save Favorites</h3>
+                    <p>Bookmark recipes you love and access them anytime.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Multi-language Support</h3>
+                    <p>Discover recipes in your preferred language.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-section mission">
+            <h2><i class="fas fa-seedling"></i> Our Mission</h2>
+            <p>Our mission is to bring people closer to the joy of cooking, promote healthy eating habits, and make home-cooked meals more accessible to everyone.</p>
+        </div>
+
+        <div class="about-section testimonials">
+            <h2><i class="fas fa-quote-left"></i> What Our Users Say</h2>
+            <div class="testimonials-slider">
+                <div class="testimonial-card">
+                    <div class="user-info">
+                        <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="User">
+                        <h4>Sarah Johnson</h4>
+                    </div>
+                    <p>"This app has completely transformed my cooking experience. The recipes are easy to follow and delicious!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="user-info">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User">
+                        <h4>Michael Chen</h4>
+                    </div>
+                    <p>"As a beginner cook, I love how user-friendly this app is. The step-by-step instructions are a lifesaver!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="user-info">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="User">
+                        <h4>Emma Davis</h4>
+                    </div>
+                    <p>"The variety of recipes is amazing. I've discovered so many new dishes to try!"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-section contact">
+            <h2><i class="fas fa-envelope"></i> Get in Touch</h2>
+            <p>Have feedback, suggestions, or a recipe you want to share? We'd love to hear from you!</p>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> Email us at: <a href="mailto:nokesh8919500709@gmail.com">nokesh8919500709@gmail.com</a></p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Check if user is admin and show/hide appropriate links
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+            // Always show Recipe Collection title and Home link for logged-in users
+            document.getElementById('homeLink').style.display = 'inline-block';
+
+            if (isAdmin) {
+                // Admin links
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+                document.getElementById('membersLink').style.display = 'inline-block';
+                document.getElementById('donationsLink').style.display = 'inline-block';
+
+                // User links (hidden for admin)
+                document.getElementById('surveyLink').style.display = 'none';
+                document.getElementById('donateLink').style.display = 'none';
+                document.getElementById('aboutLink').style.display = 'none';
+                document.getElementById('profileLink').style.display = 'none';
+            } else {
+                // User links
+                document.getElementById('surveyLink').style.display = 'inline-block';
+                document.getElementById('donateLink').style.display = 'inline-block';
+                document.getElementById('aboutLink').style.display = 'inline-block';
+                document.getElementById('profileLink').style.display = 'inline-block';
+
+                // Admin links (hidden for user)
+                document.getElementById('manageRecipesLink').style.display = 'none';
+                document.getElementById('membersLink').style.display = 'none';
+                document.getElementById('donationsLink').style.display = 'none';
+            }
+        }
+
+        // Check admin status on page load
+        window.addEventListener('load', checkAdminStatus);
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+
+        // Animate testimonials
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('.testimonial-card');
+        
+        function showNextTestimonial() {
+            testimonials[currentTestimonial].classList.remove('active');
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            testimonials[currentTestimonial].classList.add('active');
+        }
+
+        // Show first testimonial
+        testimonials[0].classList.add('active');
+        
+        // Change testimonial every 5 seconds
+        setInterval(showNextTestimonial, 5000);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Chocolate Cake - Recipe Collection</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="nav-link">Recipe Collection</a>
+            <a href="survey.html" class="nav-link">Survey Form</a>
+            <a href="manage-recipes.html" class="nav-link" id="manageRecipesLink" style="display: none;">Manage Recipes</a>
+            <a href="donation.html" class="nav-link">Donate</a>
+            <a href="#" id="logoutBtn" class="btn animated-btn secondary-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="recipe-detail-container">
+            <a href="index.html" class="home-btn">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <div class="recipe-detail-content">
+                <div class="recipe-header">
+                    <h1 id="recipeName">Classic Chocolate Cake</h1>
+                    <div class="recipe-meta">
+                        <span class="time"><i class="fas fa-clock"></i> <span id="cookingTime">45</span> mins</span>
+                        <span class="difficulty"><i class="fas fa-signal"></i> <span id="difficulty">Easy</span></span>
+                        <span class="category"><i class="fas fa-utensils"></i> <span id="category">Dessert</span></span>
+                    </div>
+                </div>
+                <div class="recipe-image-container">
+                    <img id="recipeImage" src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Classic Chocolate Cake">
+                </div>
+                <div class="recipe-details">
+                    <div class="ingredients-section">
+                        <h2><i class="fas fa-list"></i> Ingredients</h2>
+                        <ul id="ingredientsList">
+                            <li>Flour</li>
+                            <li>Sugar</li>
+                            <li>Cocoa Powder</li>
+                            <li>Eggs</li>
+                            <li>Milk</li>
+                            <li>Butter</li>
+                        </ul>
+                    </div>
+                    <div class="instructions-section">
+                        <h2><i class="fas fa-tasks"></i> Instructions</h2>
+                        <ol id="instructionsList">
+                            <li>Mix ingredients.</li>
+                            <li>Bake.</li>
+                            <li>Decorate.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        function checkLogin() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Check login status on page load
+        window.addEventListener('load', checkLogin);
+
+        // Check if user is admin and show/hide manage recipes link
+        function checkAdminStatus() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                document.getElementById('manageRecipesLink').style.display = 'inline-block';
+            }
+        }
+
+        // Check admin status on page load
+        window.addEventListener('load', checkAdminStatus);
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html> 
